@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import Foundation
 
 class MainTableViewController: UITableViewController {
     
@@ -137,6 +138,7 @@ class MainTableViewController: UITableViewController {
         let markAsComplete = UIContextualAction(style: .normal, title: "Done") { (action, view, done) in
             task.isCompleted = true
             self.tableData = self.fetchAllItems()
+            //Should be reloading only that cell
             tableView.reloadData()
         }
         
@@ -179,6 +181,14 @@ class MainTableViewController: UITableViewController {
         catch {
             print("Errors are \(error)")
         }
+        //array 1
+        data["Completed"] = data["Completed"]?.sorted(by: {
+            $0.dueDate?.compare($1.dueDate!) == .orderedDescending
+        })
+        //array 2
+        data["To-Do"]  = data["To-Do"]?.sorted(by: {
+            $0.dueDate?.compare($1.dueDate!) == .orderedDescending
+        })
         return data
     }
 }
