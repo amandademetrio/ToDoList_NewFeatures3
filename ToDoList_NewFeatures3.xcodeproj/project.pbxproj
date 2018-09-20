@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D00C52B121545727007C35AB /* TaskCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00C52B021545727007C35AB /* TaskCellDelegate.swift */; };
 		D02A9366215436FD002E0762 /* TaskDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02A9365215436FD002E0762 /* TaskDetailViewController.swift */; };
 		D02A93682154396C002E0762 /* TaskDetailViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02A93672154396C002E0762 /* TaskDetailViewDelegate.swift */; };
 		D054F12721533115007C885F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D054F12621533115007C885F /* AppDelegate.swift */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D00C52B021545727007C35AB /* TaskCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCellDelegate.swift; sourceTree = "<group>"; };
 		D02A9365215436FD002E0762 /* TaskDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailViewController.swift; sourceTree = "<group>"; };
 		D02A93672154396C002E0762 /* TaskDetailViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailViewDelegate.swift; sourceTree = "<group>"; };
 		D054F12321533115007C885F /* ToDoList_NewFeatures3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoList_NewFeatures3.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,6 +75,7 @@
 				D054F13F21533585007C885F /* AddTaskViewDelegate.swift */,
 				D054F13B215331A7007C885F /* MainTableViewController.swift */,
 				D054F13D21533250007C885F /* TaskCell.swift */,
+				D00C52B021545727007C35AB /* TaskCellDelegate.swift */,
 				D054F141215337A1007C885F /* AddTaskViewController.swift */,
 				D054F13021533116007C885F /* Assets.xcassets */,
 				D054F13221533116007C885F /* LaunchScreen.storyboard */,
@@ -156,6 +159,7 @@
 				D02A9366215436FD002E0762 /* TaskDetailViewController.swift in Sources */,
 				D054F14021533585007C885F /* AddTaskViewDelegate.swift in Sources */,
 				D054F142215337A1007C885F /* AddTaskViewController.swift in Sources */,
+				D00C52B121545727007C35AB /* TaskCellDelegate.swift in Sources */,
 				D02A93682154396C002E0762 /* TaskDetailViewDelegate.swift in Sources */,
 				D054F13E21533250007C885F /* TaskCell.swift in Sources */,
 				D054F12F21533115007C885F /* ToDoList_NewFeatures3.xcdatamodeld in Sources */,

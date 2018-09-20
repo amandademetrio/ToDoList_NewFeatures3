@@ -24,8 +24,11 @@ class MainTableViewController: UITableViewController {
         performSegue(withIdentifier: "AddTaskSegue", sender: nil)
     }
     
+    @IBOutlet weak var searchBar: UISearchBar!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        searchBar.delegate = self
         tableView.dataSource = self
         tableView.delegate = self
         tableData = fetchAllItems()
@@ -82,7 +85,8 @@ class MainTableViewController: UITableViewController {
         let task = tableData[key]![indexPath.row]
         cell.tasktitleLabel!.text = "\(String(describing: task.title!))"
         cell.descLabel!.text = "\(String(describing: task.desc!))"
-        
+        cell.indexPath = indexPath
+        //Formatting and assigning date
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM d, yyyy"
         let dateToFormat = dateFormatter.string(from: task.dueDate!)
@@ -94,6 +98,17 @@ class MainTableViewController: UITableViewController {
         else {
             cell.accessoryType = .none
         }
+        
+        if task.isLoved == true {
+            let image = UIImage(named: "full_heart")
+            cell.heartButton.setImage(image, for: .normal)
+        }
+        else {
+            let image = UIImage(named: "empty_heart")
+            cell.heartButton.setImage(image, for: .normal)
+        }
+                
+        cell.delegate = self as TaskCellDelegate
         
         return cell
     }
@@ -138,7 +153,6 @@ class MainTableViewController: UITableViewController {
         let markAsComplete = UIContextualAction(style: .normal, title: "Done") { (action, view, done) in
             task.isCompleted = true
             self.tableData = self.fetchAllItems()
-            //Should be reloading only that cell
             tableView.reloadData()
         }
         
@@ -202,6 +216,7 @@ extension MainTableViewController: AddTaskViewDelegate {
         } else {
             task = Task(context: context)
             task.isCompleted = false
+            task.isLoved = false
             tableData["To-Do"]?.append(task)
         }
         task.title = taskName
@@ -222,4 +237,64 @@ extension MainTableViewController: TaskDetailViewDelegate {
         self.tableData = self.fetchAllItems()
         tableView.reloadData()
     }
+}
+
+extension MainTableViewController: TaskCellDelegate {
+    func sendHeartClickToMainView(_ indexPath: IndexPath) {
+        let key = sections[indexPath.section]
+        let task = tableData[key]![indexPath.row]
+        
+        if task.isLoved == true {
+            task.isLoved = false
+        }
+        else if task.isLoved == false {
+            task.isLoved = true
+        }
+        saveContext()
+        self.tableData = self.fetchAllItems()
+        tableView.reloadData()
+    }
+}
+
+extension MainTableViewController: UISearchDisplayDelegate, UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText != "" {
+            tableData = [
+                "To-Do":[],
+                "Completed":[]
+            ]
+            var predicate: NSPredicate = NSPredicate()
+            predicate = NSPredicate(format: "title contains[c] '\(searchText)'")
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Task")
+            fetchRequest.predicate = predicate
+            do {
+                let results = try context.fetch(fetchRequest) as Array
+                
+                for task in results {
+                    if (task as AnyObject).isCompleted == true {
+                        tableData["Completed"]?.append(task as! Task)
+                    }
+                    else {
+                        tableData["To-Do"]?.append(task as! Task)
+                    }
+                }
+                tableView.reloadData()
+            }
+            catch {
+                print("Could not get search data")
+            }
+        }
+        else {
+            self.tableData = self.fetchAllItems()
+            tableView.reloadData()
+            self.view.endEditing(true)
+        }
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        self.view.endEditing(true)
+    }
+    
 }
