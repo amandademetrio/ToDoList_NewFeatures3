@@ -12,6 +12,8 @@ class AddTaskViewController: UIViewController {
     
     var delegate: AddTaskViewDelegate?
     
+    var indexPath: IndexPath?
+    
     var taskName: String?
     @IBOutlet weak var taskTitleTextField: UITextField!
     
@@ -29,17 +31,21 @@ class AddTaskViewController: UIViewController {
     @IBAction func doneButtonPressed(_ sender: UIButton) {
         taskName = taskTitleTextField.text
         taskDesc = taskDescriptionTextField.text
-        delegate?.sendDataToMainView(taskName!, taskDesc!, dueDate!)
+        delegate?.sendDataToMainView(taskName!, taskDesc!, dueDate!, indexPath)
     }
     
     @IBAction func cancelButtonPressed(_ sender: UIButton) {
         dismiss(animated: true, completion: nil)
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        taskTitleTextField.text = taskName
+        taskDescriptionTextField.text = taskDesc
+        datePicker.minimumDate = Date()
+        if dueDate != nil {
+            datePicker.date = dueDate!
+        }
     }
 
     override func didReceiveMemoryWarning() {

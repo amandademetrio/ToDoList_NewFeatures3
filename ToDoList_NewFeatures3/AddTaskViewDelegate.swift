@@ -10,5 +10,5 @@ import Foundation
 import UIKit
 
 protocol AddTaskViewDelegate {
-    func sendDataToMainView(_ taskName: String, _ taskDesc: String, _ dueDate: Date)
+    func sendDataToMainView(_ taskName: String, _ taskDesc: String, _ dueDate: Date, _ indexPath: IndexPath?)
 }

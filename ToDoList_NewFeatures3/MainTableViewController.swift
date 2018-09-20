@@ -13,10 +13,7 @@ class MainTableViewController: UITableViewController {
     
     let sections: [String] = ["To-Do","Completed"]
     
-    var tableData: [String:[Task]] = [
-        "To-Do":[],
-        "Completed":[]
-    ]
+    var tableData: [String:[Task]] = [:]
     
     //Stagging area for stuff to be added to Core Data
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -31,12 +28,21 @@ class MainTableViewController: UITableViewController {
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
-        fetchAllItems()
+        tableData = fetchAllItems()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let addTaskController = segue.destination as! AddTaskViewController
         addTaskController.delegate = self as AddTaskViewDelegate
+        
+        if let indexPath = sender as? IndexPath {
+            let key = sections[indexPath.section]
+            let task = tableData[key]![indexPath.row]
+            addTaskController.taskName = task.title
+            addTaskController.taskDesc = task.desc
+            addTaskController.dueDate = task.dueDate
+            addTaskController.indexPath = indexPath
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -62,50 +68,119 @@ class MainTableViewController: UITableViewController {
         let task = tableData[key]![indexPath.row]
         cell.tasktitleLabel!.text = "\(String(describing: task.title!))"
         cell.descLabel!.text = "\(String(describing: task.desc!))"
-        cell.dueDateLabel!.text = "\(String(describing: task.dueDate!))"
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM d, yyyy"
+        let dateToFormat = dateFormatter.string(from: task.dueDate!)
+        cell.dueDateLabel!.text = "\(String(describing: dateToFormat))"
+        
+        if task.isCompleted == true {
+            cell.accessoryType = .checkmark
+        }
+        
         return cell
     }
     
-//    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-//        //edit and delete tasks
-//    }
-//
-//    override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-//        //mark as completed
-//    }
-    
-    func fetchAllItems() {
-        let taskRequest: NSFetchRequest = Task.fetchRequest()
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
+        let key = sections[indexPath.section]
+        let task = tableData[key]![indexPath.row]
+        
+        let delete = UIContextualAction(style: .destructive, title: "Delete") { (action, view, done) in
+            self.context.delete(task)
+            self.saveContext()
+            self.tableData[key]?.remove(at: indexPath.row)
+            tableView.reloadData()
+            done(true)
+        }
+        delete.image = UIImage(named: "delete")
+        
+        let edit = UIContextualAction(style: .normal, title: "Edit") { (action, view, done) in
+            self.performSegue(withIdentifier: "AddTaskSegue", sender: indexPath)
+        }
+        edit.image = UIImage(named: "edit")
+        edit.backgroundColor = UIColor.blue
+        
+        var actions:[UIContextualAction] = []
+        
+        if task.isCompleted == true {
+            actions = [delete]
+        }
+        else {
+            actions = [delete,edit]
+        }
+        
+        return UISwipeActionsConfiguration(actions: actions)
+    }
+    
+    override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let key = sections[indexPath.section]
+        let task = tableData[key]![indexPath.row]
+        
+        let markAsComplete = UIContextualAction(style: .normal, title: "Done") { (action, view, done) in
+            task.isCompleted = true
+            self.tableData = self.fetchAllItems()
+            tableView.reloadData()
+        }
+        
+        markAsComplete.backgroundColor = UIColor.green
+        markAsComplete.image = UIImage(named: "checkmark")
+        
+        var actions:[UIContextualAction] = []
+        
+        if task.isCompleted == true {
+            actions = []
+        }
+        else {
+            actions = [markAsComplete]
+        }
+        
+        return UISwipeActionsConfiguration(actions: actions)
+    }
+    
+    func fetchAllItems() -> [String:[Task]] {
+        var data: [String:[Task]] = [
+            "To-Do":[],
+            "Completed":[]
+        ]
+        let taskRequest: NSFetchRequest = Task.fetchRequest()
         do {
             let results = try context.fetch(taskRequest)
             for task in results {
                 if task.isCompleted == true {
-                    tableData["Completed"]?.append(task)
+                    data["Completed"]?.append(task)
                 }
                 else {
-                    tableData["To-Do"]?.append(task)
+                    data["To-Do"]?.append(task)
                 }
             }
         }
         catch {
             print("Errors are \(error)")
         }
+        return data
     }
-    
 }
 
 extension MainTableViewController: AddTaskViewDelegate {
-    func sendDataToMainView(_ taskName: String, _ taskDesc: String, _ dueDate: Date) {
-        let newTask = Task(context: context)
-        newTask.title = taskName
-        newTask.desc = taskDesc
-        newTask.dueDate = dueDate
-        newTask.isCompleted = false
-        tableData["To-Do"]?.append(newTask)
+    
+    func sendDataToMainView(_ taskName: String, _ taskDesc: String, _ dueDate: Date, _ indexPath: IndexPath?) {
+        let task: Task
+        if let indexPath = indexPath {
+            let key = sections[indexPath.section]
+            task = tableData[key]![indexPath.row]
+        } else {
+            task = Task(context: context)
+            task.isCompleted = false
+            tableData["To-Do"]?.append(task)
+        }
+        task.title = taskName
+        task.desc = taskDesc
+        task.dueDate = dueDate
         tableView.reloadData()
         saveContext()
-        print("table data is",tableData)
         dismiss(animated: true, completion: nil)
     }
+    
 }
