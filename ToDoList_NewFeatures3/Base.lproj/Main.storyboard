@@ -84,11 +84,73 @@
                     </navigationItem>
                     <connections>
                         <segue destination="DgZ-Qq-0Zo" kind="presentation" identifier="AddTaskSegue" id="GbP-gl-pgK"/>
+                        <segue destination="qTg-Ba-4X6" kind="show" identifier="openDetailSegue" id="d28-6J-2Hy"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dUI-Js-X7H" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="967.20000000000005" y="119.1904047976012"/>
+        </scene>
+        <!--Task Detail View Controller-->
+        <scene sceneID="wgk-gD-YyF">
+            <objects>
+                <viewController id="qTg-Ba-4X6" customClass="TaskDetailViewController" customModule="ToDoList_NewFeatures3" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8Zb-8V-5pA">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YRR-Oo-cM1">
+                                <rect key="frame" x="16" y="96" width="343" height="26.5"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label Label Label Label Label Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XHV-Gt-7s6">
+                                <rect key="frame" x="16" y="154.5" width="343" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sept 21, 2018" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tQn-o9-llu">
+                                <rect key="frame" x="16" y="207" width="343" height="18"/>
+                                <fontDescription key="fontDescription" type="system" weight="thin" pointSize="15"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Au-CN-Lt9">
+                                <rect key="frame" x="164" y="257" width="49" height="31"/>
+                                <connections>
+                                    <action selector="isDoneSwitched:" destination="qTg-Ba-4X6" eventType="valueChanged" id="iO6-OL-80F"/>
+                                </connections>
+                            </switch>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="XHV-Gt-7s6" firstAttribute="top" secondItem="YRR-Oo-cM1" secondAttribute="bottom" constant="32" id="170-ew-adL"/>
+                            <constraint firstItem="003-HB-LZp" firstAttribute="trailing" secondItem="tQn-o9-llu" secondAttribute="trailing" constant="16" id="2Iy-Zj-vz2"/>
+                            <constraint firstItem="XHV-Gt-7s6" firstAttribute="leading" secondItem="003-HB-LZp" secondAttribute="leading" constant="16" id="Gfc-Kr-NNX"/>
+                            <constraint firstItem="YRR-Oo-cM1" firstAttribute="leading" secondItem="003-HB-LZp" secondAttribute="leading" constant="16" id="IK8-Gg-zIP"/>
+                            <constraint firstItem="3Au-CN-Lt9" firstAttribute="leading" secondItem="003-HB-LZp" secondAttribute="leading" constant="164" id="LgG-3A-mUj"/>
+                            <constraint firstItem="tQn-o9-llu" firstAttribute="top" secondItem="XHV-Gt-7s6" secondAttribute="bottom" constant="32" id="M0a-id-lWN"/>
+                            <constraint firstItem="YRR-Oo-cM1" firstAttribute="top" secondItem="003-HB-LZp" secondAttribute="top" constant="32" id="Olc-Jc-pS5"/>
+                            <constraint firstItem="003-HB-LZp" firstAttribute="trailing" secondItem="XHV-Gt-7s6" secondAttribute="trailing" constant="16" id="PZN-sw-9AV"/>
+                            <constraint firstItem="3Au-CN-Lt9" firstAttribute="top" secondItem="tQn-o9-llu" secondAttribute="bottom" constant="32" id="aQ7-yI-XWR"/>
+                            <constraint firstItem="003-HB-LZp" firstAttribute="trailing" secondItem="3Au-CN-Lt9" secondAttribute="trailing" constant="164" id="kEi-OH-s5g"/>
+                            <constraint firstItem="tQn-o9-llu" firstAttribute="leading" secondItem="003-HB-LZp" secondAttribute="leading" constant="16" id="nlm-fK-IHZ"/>
+                            <constraint firstItem="003-HB-LZp" firstAttribute="trailing" secondItem="YRR-Oo-cM1" secondAttribute="trailing" constant="16" id="sJZ-bO-R7A"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="003-HB-LZp"/>
+                    </view>
+                    <connections>
+                        <outlet property="isDoneSwitch" destination="3Au-CN-Lt9" id="pMX-Wo-zLQ"/>
+                        <outlet property="taskDateLabel" destination="tQn-o9-llu" id="o8X-PL-Bli"/>
+                        <outlet property="taskDescLabel" destination="XHV-Gt-7s6" id="oBy-Up-Sxc"/>
+                        <outlet property="taskTitleLabel" destination="YRR-Oo-cM1" id="BDK-JE-vHd"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="43L-rF-1B9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="967" y="847"/>
         </scene>
         <!--Add Task View Controller-->
         <scene sceneID="MwS-7U-ZgD">
