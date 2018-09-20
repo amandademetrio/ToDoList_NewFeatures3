@@ -66,13 +66,20 @@ class MainTableViewController: UITableViewController {
         return cell
     }
     
+//    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+//        //edit and delete tasks
+//    }
+//
+//    override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+//        //mark as completed
+//    }
+    
     func fetchAllItems() {
-        var tasksInList: [Task] = []
-        let taskRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Task")
+        let taskRequest: NSFetchRequest = Task.fetchRequest()
+        
         do {
             let results = try context.fetch(taskRequest)
-            tasksInList = results as! [Task]
-            for task in tasksInList {
+            for task in results {
                 if task.isCompleted == true {
                     tableData["Completed"]?.append(task)
                 }
