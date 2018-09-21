@@ -29,6 +29,7 @@ class MainTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.delegate = self
+        searchBar.setImage(UIImage(named: "empty"), for: UISearchBarIcon.clear, state: UIControlState.normal)
         tableView.dataSource = self
         tableView.delegate = self
         tableData = fetchAllItems()
@@ -266,7 +267,7 @@ extension MainTableViewController: UISearchDisplayDelegate, UISearchBarDelegate 
             ]
             var predicate: NSPredicate = NSPredicate()
             predicate = NSPredicate(format: "title contains[c] '\(searchText)'")
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            //let appDelegate = UIApplication.shared.delegate as! AppDelegate
             let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Task")
             fetchRequest.predicate = predicate
             do {
